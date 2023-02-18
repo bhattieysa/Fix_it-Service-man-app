@@ -6,7 +6,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './src/screens/LoginScreen';
 import SignupScreen from './src/screens/SignupScreen';
 
-import Home from './src/screens/Attendees/Home/index';
+
+import HomeStack from './routes/HomeStack'
 
 const App = () => {
     useEffect(()=>{
@@ -16,12 +17,12 @@ const App = () => {
       const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}  initialRouteName="LoginScreen">
+        <Stack.Navigator screenOptions={{ headerShown: false,animation: 'none' }}  initialRouteName="LoginScreen">
             <Stack.Screen  name='LoginScreen'  component={LoginScreen}/>
           
             <Stack.Screen name='SignupScreen'  component={SignupScreen}/>
        
-            <Stack.Screen name='Home' component={Home}/>
+            <Stack.Screen name='Home' screenOptions={{animation: 'none'}} component={HomeStack}/>
            
 
 

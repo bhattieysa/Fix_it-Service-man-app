@@ -1,87 +1,107 @@
-import { View, Text, Button, SafeAreaView, StatusBar, KeyboardAvoidingView, Image, Alert,TouchableOpacity, TextInput, ScrollView } from 'react-native'
-import React, { useState } from 'react'
-import { StackActions } from '@react-navigation/native';
+import { View, Text, Button, SafeAreaView, StatusBar, KeyboardAvoidingView, Image, Alert, TouchableOpacity, TextInput, ScrollView } from 'react-native'
+import React, { useState ,useEffect,useCallback} from 'react'
+
 import Colors from '../constants/Colors';
 import Layout from '../constants/Dimensions';
 import KeyBoardDismissHandler from '../components/KeyBoardDismissHandler';
 import AppLoader from '../components/Apploader';
 import axios from 'axios';
 import * as api from '../../apis/api';
-
-const LoginScreen = ({ navigation }) => {
+import { StackActions, NavigationActions } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+const LoginScreen =  ({ navigation }) => {
 
   // const [verify, setVerify] = useState(false)
   // const [email, setEmail] = useState(false)
   const [loading, setLoading] = useState(false)
   const [emailAddress, setEmailAddress] = useState(null)
   const [password, setPassword] = useState(null)
-  // const validateEmail = (text) => {
+  const navigation1 = useNavigation();
 
 
-  //   let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-  //   if (reg.test(text) === false) {
+  
+
+    useEffect( () => {
+     
+
+      async function check() {
+        const data = await AsyncStorage.getItem('user')
+        if (data != null) {
+          navigation1.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+          });
+  
+        }
+    
+      }
+  
+      check()
 
 
-  //     setVerify(false)
-  //     return false;
-  //   }
-  //   else {
 
+     
+ 
+    }, [])
 
-  //     setVerify(true)
-  //     setEmail(text)
-  //   }
-  // }
+  const Login = () => {
 
-const Login=()=>{
-
-  if (emailAddress == null) {
-    setEmailAddress(false)
-    return
-  }
-  if (password == null) {
-    setPassword(false)
-    return
-  }
-  var formData = new FormData();
-  formData.append('email', emailAddress);
-  formData.append('password', password);
-
-  setLoading(true)
-
-  axios({
-    method: 'POST',
-    url: api.LOGIN_URL,
-    data: formData,
-
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'multipart/form-data'
+    if (emailAddress == null) {
+      setEmailAddress(false)
+      return
     }
-  })
-    .then(function (response) {
-      if (response.data.login.error == 'false') {
-        setLoading(false)
-        Alert.alert(
-          '',
-          'Login Successful',
-        );
+    if (password == null) {
+      setPassword(false)
+      return
+    }
+    var formData = new FormData();
+    formData.append('email', emailAddress);
+    formData.append('password', password);
 
-      } else {
-        setLoading(false)
-        Alert.alert(
-          '',
-          'Failed To Login',
-        );
+    setLoading(true)
+
+    axios({
+      method: 'POST',
+      url: api.LOGIN_URL,
+      data: formData,
+
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'multipart/form-data'
       }
     })
-    .catch(function (error) {
-      console.log("error1", error)
-      setLoading(false)
-    })
+      .then( async (response)=> {
+        if (response.data.login.error == 'false') {
+          setLoading(false)
+          Alert.alert(
+            '',
+            'Login Successful',
+          );
+
+         await  AsyncStorage.setItem('user',JSON.stringify(response.data))
+        
+          navigation1.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+          });
+
+        } else {
+          setLoading(false)
+          Alert.alert(
+            '',
+            'Failed To Login',
+          );
+        }
+      })
+      .catch(function (error) {
+        console.log("error1",)
+        setLoading(false)
+      })
 
 
-}
+  }
 
 
 

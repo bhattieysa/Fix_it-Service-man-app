@@ -28,6 +28,8 @@ const SignupScreen = ({ route, navigation }) => {
   const [subCategories, setSubCategories] = useState()
   const [frontSideDNI, setFrontSideDNI] = useState(null)
   const [frontSideDNIBase64, setFrontSideDNIBase64] = useState(null)
+  const [image, setImage] = useState(null)
+  const [imageBase64, setImageBase64] = useState(null)
   const [backSideDNIBase64, setBackSideDNIBase64] = useState(null)
   const [backSideDNI, setBackSideDNI] = useState(null)
   const [backgroundCheckCertificatesBase64, setbackgroundCheckCertificatesBase64] = useState(null)
@@ -77,7 +79,73 @@ const SignupScreen = ({ route, navigation }) => {
 
   }, [])
 
+  const UploadImage = () => {
+    Alert.alert(
+      "Upload Your Image",
+      'Select Pic From',
+      [
+        {
+          text: 'Gallery',
+          onPress: () => {
+            ImagePicker.openPicker({
 
+              width: 500,
+              height: 500,
+              cropping: true,
+              cropperCircleOverlay: true,
+              sortOrder: 'none',
+              compressImageMaxWidth: 1000,
+              compressImageMaxHeight: 1000,
+              compressImageQuality: 1,
+              compressVideoPreset: 'MediumQuality',
+              includeExif: true,
+              cropperStatusBarColor: 'white',
+              cropperToolbarColor: 'white',
+              cropperActiveWidgetColor: 'white',
+              cropperToolbarWidgetColor: '#3498DB',
+              mediaType: 'photo',
+              includeBase64: true
+            })
+              .then((image) => {
+                // setBase64(image.data)
+                // setProfileImage(image.path)
+                setImage(image.path)
+                setImageBase64(image.data)
+
+              })
+              .catch((e) => {
+                //Toast.show("Failed")
+              });
+          }
+        },
+        {
+          text: 'Camera', onPress: () => {
+            ImagePicker.openCamera({
+              width: 300,
+              height: 400,
+              cropping: true,
+              mediaType: 'photo',
+              includeBase64: true
+            }).then(image => {
+
+              // setBase64(image.data)
+              // setProfileImage(image.path)
+              setImage(image.path)
+              setImageBase64(image.data)
+
+
+            });
+          }
+        },
+        {
+          text: 'Cancel',
+          // onPress: () => Toast.show('Cancel Pressed'),
+          style: 'cancel'
+        }
+      ],
+      { cancelable: false }
+    );
+  }
   const FrontSide = () => {
     Alert.alert(
       "DNI Front Side Picture",
@@ -300,6 +368,13 @@ const SignupScreen = ({ route, navigation }) => {
       setBankName(false)
       return
     }
+    if (image == null) {
+      Alert.alert(
+        '',
+        'Please Upload Your Image',
+      );
+      return
+    }
     if (frontSideDNI == null) {
       Alert.alert(
         '',
@@ -336,14 +411,15 @@ const SignupScreen = ({ route, navigation }) => {
     formData.append('password', password);
     formData.append('experience', experience);
     formData.append('address', address);
-    formData.append('category', categoriesId);
-    formData.append('sub_category', subCategoriesId);
+    // formData.append('category', categoriesId);
+    // formData.append('sub_category', subCategoriesId);
     formData.append('account_name', accountHolderName);
     formData.append('type_of_account', typeOfAccount);
     formData.append('account_number', accountNumber);
     formData.append('bank_name', bankName);
     formData.append('front_side', frontSideDNIBase64);
     formData.append('back_side', backSideDNIBase64);
+    formData.append('image', imageBase64);
     backgroundCheckCertificates.map((file, index) => (
       formData.append('background', {
         uri: file.uri,
@@ -514,276 +590,6 @@ const SignupScreen = ({ route, navigation }) => {
                 :
                 <></>
               }
-              <View style={{ marginTop: wide * 0.05, }}>
-                <Text style={{ color: '#2C3A4B', fontSize: 16, fontWeight: '600', marginLeft: wide * 0.03, marginBottom: wide * 0.02 }}>Category</Text>
-                <View >
-                  {/* <TextInput placeholder='Gender' style={{ marginHorizontal: wide * 0.05 }} /> */}
-
-                  <TouchableOpacity
-                    style={{ height: wide * 0.125, borderColor: '#EBEEF2', borderWidth: 2, borderRadius: wide * 0.1, flexDirection: 'row', alignItems: 'center' }}
-                    activeOpacity={1}
-                    onPress={() => setShowCategoryrDropDown(true)}
-                  >
-                    <Text style={{
-                      marginHorizontal: wide * 0.05, flex: 1,
-
-                      color: categoryValue == "Select Category" ? '#DADEE3' : '#000000'
-
-                    }}>
-
-                      {categoryValue}
-                    </Text>
-                    <Image
-                      style={{
-                        width: wide * 0.035, height: wide * 0.025, marginHorizontal: wide * 0.05,
-                      }} source={require('../../Images/dropDownIcon.png')}
-                    />
-
-                  </TouchableOpacity>
-
-
-                </View>
-                {categoryValue == false ?
-                  <View style={{ height: wide * 0.052, borderRadius: 15, flexDirection: 'row' }}>
-                    <View style={{ flex: 1, alignItems: 'flex-start', marginLeft: wide * 0.02, marginTop: wide * 0.02 }}>
-                      <Text style={{ color: 'red', fontSize: 12, fontWeight: '600' }} >Category Can't Be Blank</Text>
-                    </View>
-                  </View>
-                  :
-                  <></>
-                }
-                {showCategoryDropDown === true ?
-                  <Modal
-                    animationType="fade"
-                    transparent={true}
-                    visible={showCategoryDropDown}
-                  >
-                    <View
-                      // onPress={() => setShowGenderDropDown(false)}
-                      style={{
-                        width: wide,
-                        height: high,
-                        justifyContent: 'center', alignItems: 'center'
-                      }}
-                    >
-                      <BlurView style={{
-                        width: wide,
-                        height: high,
-                        position: 'absolute',
-                        // justifyContent: 'center', alignItems: 'center'
-                      }}
-                        blurAmount={10}
-                        blurRadius={10}
-                      />
-                      <View style={{
-                        width: '65%', height: wide * 0.6, backgroundColor: '#ffffff',
-                        marginTop: 20, borderRadius: 20, alignItems: 'center',
-                      }}>
-
-                        <View style={{
-                          width: '100%', height: '30%',
-                          alignItems: 'center', justifyContent: 'center',
-                          backgroundColor: Colors.main,
-                          borderTopLeftRadius: 20,
-                          borderTopRightRadius: 20,
-                          flexDirection: 'row',
-
-                          // borderBottomColor: Colors.newGrayFontColor, borderBottomWidth: 1
-                        }}>
-                          <Text style={{
-                            marginLeft: wide * 0.03, flex: 1, color: Colors.white, fontSize: 18, fontWeight: '700', marginTop: wide * 0.01,
-                          }}>Select Category</Text>
-
-
-                          <Ionicons name="ios-close" onPress={() => setShowCategoryrDropDown(false)} style={{ marginRight: wide * 0.02 }} size={34} color="#fff" />
-                        </View>
-
-
-                        <View style={{ width: '100%', height: '70%', }}>
-
-                          <FlatList
-                            data={categories}
-                            bounce={false}
-                            showsVerticalScrollIndicator={false}
-
-                            keyExtractor={item => item.id}
-                            renderItem={(item, index) =>
-
-
-
-                              <TouchableOpacity
-                                style={{
-                                  justifyContent: 'center', alignItems: 'center',
-                                  height: wide * 0.13, marginTop: wide * 0.01,
-                                  borderBottomColor: 'grey', borderBottomWidth: 1
-                                }}
-
-
-                                onPress={() => { setCategoriesId(item.item.id), setCategoriesIndex(item.index), setCategoryValue(item.item.name), setShowCategoryrDropDown(false) }}
-                              >
-                                <Text style={{
-                                  color: '#000000', fontSize: 15, lineHeight: 16,
-
-                                }}>{item.item.name}</Text>
-
-                              </TouchableOpacity>
-
-                            }
-                          />
-
-
-                        </View>
-
-
-                      </View>
-
-                      {/* {/ </BlurView> /} */}
-                    </View>
-                  </Modal>
-                  : null
-                }
-
-
-              </View>
-
-              {categoryValue != "Select Category" ?
-
-                <View style={{ marginTop: wide * 0.05, }}>
-                  <Text style={{ color: '#2C3A4B', fontSize: 16, fontWeight: '600', marginLeft: wide * 0.03, marginBottom: wide * 0.02 }}>Sub Category</Text>
-                  <View >
-                    {/* <TextInput placeholder='Gender' style={{ marginHorizontal: wide * 0.05 }} /> */}
-
-                    <TouchableOpacity
-                      style={{ height: wide * 0.125, borderColor: '#EBEEF2', borderWidth: 2, borderRadius: wide * 0.1, flexDirection: 'row', alignItems: 'center' }}
-                      activeOpacity={1}
-                      onPress={() => setShowSubCategoryrDropDown(true)}
-                    >
-                      <Text style={{
-                        marginHorizontal: wide * 0.05, flex: 1,
-
-                        color: subCategoryValue == "Select Sub Category" ? '#DADEE3' : '#000000'
-
-                      }}>
-
-                        {subCategoryValue}
-                      </Text>
-                      <Image
-                        style={{
-                          width: wide * 0.035, height: wide * 0.025, marginHorizontal: wide * 0.05,
-                        }} source={require('../../Images/dropDownIcon.png')}
-                      />
-
-                    </TouchableOpacity>
-
-
-                  </View>
-                  {subCategoryValue == false ?
-                    <View style={{ height: wide * 0.052, borderRadius: 15, flexDirection: 'row' }}>
-                      <View style={{ flex: 1, alignItems: 'flex-start', marginLeft: wide * 0.02, marginTop: wide * 0.02 }}>
-                        <Text style={{ color: 'red', fontSize: 12, fontWeight: '600' }} >Sub Category Can't Be Blank</Text>
-                      </View>
-                    </View>
-                    :
-                    <></>
-                  }
-                  {showSubCategoryDropDown === true ?
-                    <Modal
-                      animationType="fade"
-                      transparent={true}
-                      visible={showSubCategoryDropDown}
-                    >
-                      <View
-                        // onPress={() => setShowGenderDropDown(false)}
-                        style={{
-                          width: wide,
-                          height: high,
-                          justifyContent: 'center', alignItems: 'center'
-                        }}
-                      >
-                        <BlurView style={{
-                          width: wide,
-                          height: high,
-                          position: 'absolute',
-                          // justifyContent: 'center', alignItems: 'center'
-                        }}
-                          blurAmount={10}
-                          blurRadius={10}
-                        />
-                        <View style={{
-                          width: '65%', height: wide * 0.6, backgroundColor: '#ffffff',
-                          marginTop: 20, borderRadius: 20, alignItems: 'center',
-                        }}>
-
-                          <View style={{
-                            width: '100%', height: '30%',
-                            alignItems: 'center', justifyContent: 'center',
-                            backgroundColor: Colors.main,
-                            borderTopLeftRadius: 20,
-                            borderTopRightRadius: 20,
-                            flexDirection: 'row',
-
-                            // borderBottomColor: Colors.newGrayFontColor, borderBottomWidth: 1
-                          }}>
-                            <Text style={{
-                              marginLeft: wide * 0.03, flex: 1, color: Colors.white, fontSize: 18, lineHeight: 16, fontWeight: '700', marginTop: wide * 0.01,
-                            }}>Select Sub Category</Text>
-
-
-                            <Ionicons name="ios-close" onPress={() => setShowSubCategoryrDropDown(false)} style={{ marginRight: wide * 0.02 }} size={34} color="#fff" />
-                          </View>
-
-
-                          <View style={{ width: '100%', height: '70%', }}>
-
-                            <FlatList
-                              data={categories[categoriesIndex].sub_categories}
-                              bounce={false}
-                              showsVerticalScrollIndicator={false}
-
-                              keyExtractor={item => item.id}
-                              renderItem={(item, index) =>
-
-
-
-                                <TouchableOpacity
-                                  style={{
-                                    justifyContent: 'center', alignItems: 'center',
-                                    height: wide * 0.13, marginTop: wide * 0.01,
-                                    borderBottomColor: 'grey', borderBottomWidth: 1
-                                  }}
-
-
-                                  onPress={() => { setSubCategoriesId(item.item.id), setSubCategoryValue(item.item.name), setShowSubCategoryrDropDown(false) }}
-                                >
-                                  <Text style={{
-                                    color: '#000000', fontSize: 15, lineHeight: 16,
-
-                                  }}>{item.item.name}</Text>
-
-                                </TouchableOpacity>
-
-                              }
-                            />
-
-
-                          </View>
-
-
-                        </View>
-
-                        {/* {/ </BlurView> /} */}
-                      </View>
-                    </Modal>
-                    : null
-                  }
-
-
-                </View>
-                :
-                null
-              }
-
-
               <View style={{ backgroundColor: Colors.main, marginTop: wide * 0.07, paddingVertical: wide * 0.017, paddingLeft: wide * 0.05, borderRadius: wide * 0.01 }}>
                 <Text style={{ color: Colors.white, fontSize: wide * 0.05, fontWeight: 'bold', }}>Bank Details</Text>
               </View>
@@ -849,6 +655,30 @@ const SignupScreen = ({ route, navigation }) => {
                 :
                 <></>
               }
+              <View style={{ backgroundColor: Colors.main, marginTop: wide * 0.07, paddingVertical: wide * 0.017, paddingLeft: wide * 0.05, borderRadius: wide * 0.01 }}>
+                <Text style={{ color: Colors.white, fontSize: wide * 0.05, fontWeight: 'bold', }}>Upload Your Image</Text>
+              </View>
+
+              <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: wide * 0.07 }}>
+
+                <TouchableOpacity onPress={() => UploadImage()}>
+                  <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    {image != null ?
+                      <Image
+                        style={{ width: wide * 0.2, height: wide * 0.15, borderRadius: wide * 0.02, marginBottom: wide * 0.02, marginTop: wide * 0.03 }}
+                        source={{ uri: image }}
+                      />
+                      :
+                      <Entypo name='upload' size={wide * 0.15} color="#000" />
+                    }
+                    <Text style={{ color: '#2C3A4B', fontSize: 16, fontWeight: '600' }}>Upload Image</Text>
+
+                  </View>
+                </TouchableOpacity>
+            
+
+              </View>
+              
               <View style={{ backgroundColor: Colors.main, marginTop: wide * 0.07, paddingVertical: wide * 0.017, paddingLeft: wide * 0.05, borderRadius: wide * 0.01 }}>
                 <Text style={{ color: Colors.white, fontSize: wide * 0.05, fontWeight: 'bold', }}>Upload DNI Images</Text>
               </View>
