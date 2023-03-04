@@ -21,6 +21,7 @@ const SignupScreen = ({ route, navigation }) => {
   const [categoryValue, setCategoryValue] = useState('Select Category')
   const [subCategoryValue, setSubCategoryValue] = useState('Select Sub Category')
   const [loading, setLoading] = useState(false)
+  const [professionCertificates, setProfessionCertificates] = useState(null)
   const [categories, setCategories] = useState()
   const [categoriesIndex, setCategoriesIndex] = useState()
   const [categoriesId, setCategoriesId] = useState()
@@ -35,7 +36,7 @@ const SignupScreen = ({ route, navigation }) => {
   const [backgroundCheckCertificatesBase64, setbackgroundCheckCertificatesBase64] = useState(null)
   const [professionCertificatesBase64, setProfessionCertificatesBase64] = useState(null)
   const [backgroundCheckCertificates, setbackgroundCheckCertificates] = useState(null)
-  const [professionCertificates, setProfessionCertificates] = useState(null)
+4
   const [fullName, setFullName] = useState(null)
   const [dni, setDni] = useState(null)
   const [phonenumber, setPhonenumber] = useState(null)

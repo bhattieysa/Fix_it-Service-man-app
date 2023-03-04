@@ -24,21 +24,21 @@ const BottomNavigation = ({ navigation,checked }) => {
             <Text style={{ color: checked!='Home'?'#ffffff':'#000000', fontSize: 13, fontWeight: '400',  }}>Home</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")} style={{ justifyContent: 'center' }}>
+        <TouchableOpacity onPress={() => navigation.navigate("ChatStack")} style={{ justifyContent: 'center' }}>
           <View style={{ justifyContent: 'center', alignItems: 'center', }}>
 
             <Icon name="chat" size={28} color={checked!='Chat'?'#ffffff':'#000000'} />
             <Text style={{color: checked!='Chat'?'#ffffff':'#000000', fontSize: 13, fontWeight: '400',  }}>Chat</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")} style={{ justifyContent: 'center' }}>
+        <TouchableOpacity onPress={() => navigation.navigate("ServicesStack")} style={{ justifyContent: 'center' }}>
           <View style={{ justifyContent: 'center', alignItems: 'center', }}>
 
             <Icon name="tools" size={28} color={checked!='Services'?'#ffffff':'#000000'} />
             <Text style={{ color: checked!='Services'?'#ffffff':'#000000', fontSize: 13, fontWeight: '400',  }}>Services</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")} style={{ justifyContent: 'center' }}>
+        <TouchableOpacity onPress={() => navigation.navigate("PaymentStack")} style={{ justifyContent: 'center' }}>
           <View style={{ justifyContent: 'center', alignItems: 'center',  }}>
 
             <Icon name="bank" size={28} color={checked!='Payment'?'#ffffff':'#000000'}/>

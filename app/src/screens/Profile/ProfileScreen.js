@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import * as api from '../../../apis/api';
 import axios from 'axios';
+import FastImage from 'react-native-fast-image';
 const ProfileScreen = ({ navigation }) => {
 
     const [loading, setLoading] = useState(false)
@@ -93,7 +94,7 @@ const ProfileScreen = ({ navigation }) => {
                                 <View style={{ flexDirection: 'row', backgroundColor: Colors.main }}>
 
 
-                                    <Image
+                                    <FastImage
                                         style={{ marginLeft: wide * 0.05, width: wide * 0.3, height: wide * 0.3, borderRadius: wide * 0.2, marginBottom: wide * 0.03, marginTop: wide * 0.03 }}
                                         source={{ uri: api.Image_URL + userDetails.image }} />
                                     <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>

@@ -36,6 +36,7 @@ import Svg, {
     Pattern,
     Mask,
 } from 'react-native-svg';
+import FastImage from 'react-native-fast-image';
 
 const EditProfileScreen = ({ route, navigation }) => {
     // getting params
@@ -515,7 +516,7 @@ const EditProfileScreen = ({ route, navigation }) => {
                 <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
                     <ScrollView showsVerticalScrollIndicator={false} bounces={false} keyboardShouldPersistTaps="handled">
 
-                        <View style={{ flexDirection: 'row', marginHorizontal: wide * 0.07 }}>
+                        <View style={{ flexDirection: 'row', marginHorizontal: wide * 0.04 }}>
 
                             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                 <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: 35, height: 35, justifyContent: 'center', alignItems: 'center' }}>
@@ -713,12 +714,12 @@ const EditProfileScreen = ({ route, navigation }) => {
                                 <TouchableOpacity onPress={() => UploadImage()}>
                                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                         {image != null ?
-                                            <Image
+                                            <FastImage
                                                 style={{ width: wide * 0.3, height: wide * 0.3, borderRadius: wide * 0.02, marginBottom: wide * 0.02, marginTop: wide * 0.03 }}
                                                 source={{ uri: image }}
                                             />
                                             :
-                                            <Image
+                                            <FastImage
                                                 style={{ width: wide * 0.3, height: wide * 0.3, borderRadius: wide * 0.02, marginBottom: wide * 0.02, marginTop: wide * 0.03 }}
                                                 source={{ uri:api.Image_URL+data.image }}
                                             />
