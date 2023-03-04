@@ -66,12 +66,15 @@ const LoginScreen =  ({ navigation }) => {
       method: 'POST',
       url: api.LOGIN_URL,
       data: formData,
+      
+    
+     
 
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'multipart/form-data'
       }
-    })
+    },)
       .then( async (response)=> {
         if (response.data.login.error == 'false') {
           setLoading(false)
@@ -86,6 +89,7 @@ const LoginScreen =  ({ navigation }) => {
             index: 0,
             routes: [{ name: 'Home' }],
           });
+         
 
         } else {
           setLoading(false)
@@ -96,7 +100,7 @@ const LoginScreen =  ({ navigation }) => {
         }
       })
       .catch(function (error) {
-        console.log("error1",)
+        console.log("error11",error)
         setLoading(false)
       })
 
@@ -116,7 +120,7 @@ const LoginScreen =  ({ navigation }) => {
 
             <View style={{ marginHorizontal: wide * 0.07, marginTop: wide * 0.1 }}>
               <Image
-                style={{ width: wide * 0.8, height: wide * 0.4, resizeMode: 'cover', alignSelf: 'center' }}
+                style={{ width: wide * 0.8, height: wide * 0.4, alignSelf: 'center' }}
                 source={require("../../Images/logo.png")}
               />
               <Text style={{ marginVertical: wide * 0.09, alignSelf: 'center', fontSize: wide * 0.06, fontWeight: 'bold', color: '#000000' }}>Sign In To Your Account</Text>
